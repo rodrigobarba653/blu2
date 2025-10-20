@@ -1,217 +1,23 @@
-"use client";
-
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import gsap from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
-
-// Register GSAP plugins
-gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
-
-// Client component for scroll functionality
-function ScrollToContact() {
-  const scrollToContact = () => {
-    const contactSection = document.getElementById("contact");
-    if (contactSection) {
-      gsap.to(window, {
-        duration: 1.5,
-        scrollTo: { y: contactSection, offsetY: 80 },
-        ease: "power3.inOut",
-      });
-    }
-  };
-
-  return (
-    <button
-      onClick={scrollToContact}
-      className="bg-transparent border border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-black transition-colors backdrop-blur-sm font-roboto-black uppercase tracking-wider mt-6"
-    >
-      Contáctanos
-    </button>
-  );
-}
+import HeroContainer from "@/components/HeroContainer";
+import AnimatedSections from "@/components/AnimatedSections";
+import ScrollToContact from "@/components/ScrollToContact";
 
 export default function Home() {
-  const heroContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // GSAP ScrollTrigger for hero section border inset animation
-    if (heroContainerRef.current) {
-      gsap.fromTo(
-        heroContainerRef.current,
-        {
-          borderWidth: "0px",
-          borderColor: "transparent",
-        },
-        {
-          borderWidth: "60px",
-          borderColor: "#000000",
-          ease: "none",
-          scrollTrigger: {
-            trigger: heroContainerRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: 1,
-          },
-        }
-      );
-    }
-
-    // GSAP parallax for h1 with data-scroll-speed
-    const h1Element = document.querySelector("[data-scroll-speed]");
-    if (h1Element) {
-      const speed = parseFloat(
-        h1Element.getAttribute("data-scroll-speed") || "0"
-      );
-      gsap.to(h1Element, {
-        y: () => window.innerHeight * speed,
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroContainerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-    }
-
-    // Stats Bar - Fade in and slide up with stagger
-    const statItems = document.querySelectorAll(".stats-bar-item");
-    gsap.fromTo(
-      statItems,
-      {
-        opacity: 0,
-        y: 60,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".stats-bar-content",
-          start: "top 80%",
-        },
-      }
-    );
-
-    // About Us Section - Parallax image and text reveal
-    const aboutImage = document.querySelector(".about-image");
-    const aboutText = document.querySelector(".about-text");
-
-    if (aboutImage) {
-      gsap.fromTo(
-        aboutImage,
-        { scale: 1.2, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1.2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: aboutImage,
-            start: "top 75%",
-          },
-        }
-      );
-    }
-
-    if (aboutText) {
-      gsap.fromTo(
-        aboutText,
-        { x: 50, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: aboutText,
-            start: "top 75%",
-          },
-        }
-      );
-    }
-
-    // Artist Spotlight Sections - Scale and fade in
-    const artistSections = document.querySelectorAll(".artist-spotlight");
-    artistSections.forEach((section) => {
-      gsap.fromTo(
-        section,
-        { scale: 0.95, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-          },
-        }
-      );
-    });
-
-    // Services Cards - Stagger fade and slide up
-    const serviceCards = document.querySelectorAll(".service-card");
-    gsap.fromTo(
-      serviceCards,
-      { y: 80, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".services-grid",
-          start: "top 80%",
-        },
-      }
-    );
-
-    // Contact Section - Fade in with subtle scale
-    const contactSection = document.querySelector("#contact");
-    if (contactSection) {
-      gsap.fromTo(
-        contactSection,
-        { scale: 0.98, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: contactSection,
-            start: "top 85%",
-          },
-        }
-      );
-    }
-
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
-
   return (
     <div className="min-h-screen bg-black">
       <Navigation />
+      <AnimatedSections />
 
       {/* Main content with top padding for fixed nav */}
       <main className="pt-4">
         {/* Hero Section */}
         <section className="md:px-8 px-4 relative">
-          <div
-            ref={heroContainerRef}
-            className="max-w-[95vw] mx-auto rounded-4xl md:h-[90vh] h-[100vh] flex items-top justify-center relative overflow-hidden border-0 border-solid border-black!"
-          >
+          <HeroContainer>
             {/* Background Images */}
             <div className="absolute inset-0 z-20">
               <Image
@@ -244,7 +50,7 @@ export default function Home() {
                 dejan huella.
               </p>
             </div>
-          </div>
+          </HeroContainer>
           <p className="text-white text-lg leading-relaxed text-left block md:hidden  relative z-30 -mt-20">
             Representamos a artistas de alto impacto y los conectamos con
             escenarios clave. Elevamos carreras y creamos experiencias que dejan
@@ -669,7 +475,7 @@ export default function Home() {
                     <Icon icon="mdi:thumb-up" className="text-white text-2xl" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-roboto-black text-white mb-3">
+                    <h3 className="text-lg font-roboto-black text-white mb-2">
                       Follow Us
                     </h3>
                     <div className="flex gap-3">
